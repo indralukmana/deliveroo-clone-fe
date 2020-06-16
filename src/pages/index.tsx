@@ -1,13 +1,17 @@
+import React from 'react';
+
 const Example = {
-  name: "next",
+  name: 'next',
 };
 
-export default function Home() {
+const Home = (): JSX.Element => {
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
       <h1>
         <p>{Example.name}</p>
       </h1>
     </div>
   );
-}
+};
+
+export default Home;
