@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import tw from 'twin.macro';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import MainLayout from 'src/layout/main';
 import RestaurantList from 'src/components/restaurant-list';
 
