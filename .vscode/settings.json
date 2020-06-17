@@ -9,5 +9,13 @@
       "typescript",
       "typescriptreact"
   ],
-  "tslint.enable": false
+  "tslint.enable": false,
+  "peacock.remoteColor": "#dd0531",
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#dd0531",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.border": "#dd0531",
+    "titleBar.inactiveBackground": "#dd053199",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  }
 }
