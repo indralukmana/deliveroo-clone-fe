@@ -21,9 +21,14 @@
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
     "clsx": "^1.1.1",
+    "gql": "^1.1.2",
+    "graphql": "^15.1.0",
     "next": "latest",
+    "next-apollo": "^4.0.1",
     "react": "^16.12.0",
+    "react-apollo": "^3.1.5",
     "react-dom": "^16.12.0",
+    "recompose": "^0.30.0",
     "twin.macro": "^1.4.1"
   },
   "devDependencies": {
@@ -34,8 +39,8 @@
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.21.2",
     "poetic": "^1.5.0",
-    "typescript": "^3.9.5",
     "tailwindcss": "^1.4.6",
+    "typescript": "^3.9.5",
     "typescript-plugin-tw-template": "^2.0.1"
   },
   "license": "MIT"
