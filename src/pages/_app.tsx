@@ -4,7 +4,6 @@ import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from 'src/theme';
-import 'tailwindcss/dist/base.min.css';
 
 export default function MyApp(props: AppProps): JSX.Element {
   const { Component, pageProps } = props;
