@@ -1,5 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import MainLayout from 'src/layout/main';
+import RestaurantList from 'src/components/restaurant-list';
 
 const Example = {
   name: 'next',
@@ -12,6 +13,7 @@ const Home = (): JSX.Element => {
         <h1>
           <p>{Example.name}</p>
         </h1>
+        <RestaurantList />
       </div>
     </MainLayout>
   );
