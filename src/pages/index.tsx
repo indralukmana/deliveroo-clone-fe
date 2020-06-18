@@ -1,6 +1,7 @@
 import React from 'react';
 import MainLayout from 'src/layout/main';
 import RestaurantList from 'src/components/restaurant-list';
+import tw from 'twin.macro';
 
 const Example = {
   name: 'next',
@@ -9,7 +10,7 @@ const Example = {
 const Home = (): JSX.Element => {
   return (
     <MainLayout>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div css={[tw`flex flex-col items-center`]}>
         <h1>
           <p>{Example.name}</p>
         </h1>
