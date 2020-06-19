@@ -14,16 +14,23 @@ type RestaurantCardProps = {
   imageSrc: string;
 };
 
-type DishListProps = {
-  restaurantId: string;
-};
-
 type Dish = {
   id: string;
   name: string;
   price: number;
   image: {
     url: string;
+  };
+};
+
+type DishListProps = {
+  dishes: Dish[];
+};
+
+type RestaurantPageProps = {
+  restaurant: {
+    name: string;
+    dishes: Dish[];
   };
 };
 

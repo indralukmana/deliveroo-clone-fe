@@ -10,6 +10,7 @@ module.exports = {
         exceptions: ['App', 'Component'],
       },
     ],
+    'react/prop-types': 'off',
   },
   settings: {
     'import/resolver': {
