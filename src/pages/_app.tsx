@@ -5,14 +5,12 @@ import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from 'src/theme';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
-import { API_URL } from 'src/lib/constants';
+import { useApollo } from 'src/lib/apolloClient';
 
-const client = new ApolloClient({
-  uri: `${API_URL}/graphql`,
-});
 export default function MyApp(props: AppProps): JSX.Element {
   const { Component, pageProps } = props;
+
+  const apolloClient = useApollo(pageProps.initialApolloState);
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -29,7 +27,7 @@ export default function MyApp(props: AppProps): JSX.Element {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-      <ApolloProvider client={client}>
+      <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
           <StylesProvider injectFirst>
             <CssBaseline />
