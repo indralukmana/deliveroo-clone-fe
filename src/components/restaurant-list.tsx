@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import tw from 'twin.macro';
+import { API_URL } from 'src/lib/constants';
 import RestaurantCard from './restaurant-card';
 
 const query = gql`
@@ -37,9 +38,10 @@ const RestaurantList = (): JSX.Element => {
       {data?.restaurants?.map((restaurant: Restaurant) => (
         <RestaurantCard
           key={restaurant.id}
+          restaurantId={restaurant.id}
           name={restaurant.name}
           description={restaurant.description}
-          imageSrc={restaurant.image.url}
+          imageSrc={API_URL + restaurant.image.url}
         />
       ))}
     </div>

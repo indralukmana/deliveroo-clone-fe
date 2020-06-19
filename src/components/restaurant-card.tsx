@@ -9,20 +9,37 @@ import {
   Button,
 } from '@material-ui/core';
 import tw from 'twin.macro';
+import { useRouter } from 'next/dist/client/router';
 
-const RestaurantCard = ({ name, description, imageSrc }: RestaurantCardProps): JSX.Element => {
+const RestaurantCard = ({
+  restaurantId,
+  name,
+  description,
+  imageSrc,
+}: RestaurantCardProps): JSX.Element => {
+  const router = useRouter();
+
   return (
-    <Card css={[tw`w-full`]}>
-      <CardActionArea>
-        <CardMedia image={`http://localhost:1338${imageSrc}`} title={name} css={[tw`h-32`]} />
+    <Card css={[tw`w-full flex flex-col`]}>
+      <CardActionArea css={[tw`flex-1 flex flex-col`]}>
+        <CardMedia image={imageSrc} title={name} css={[tw`h-32 w-full`]} />
 
-        <CardContent>
+        <CardContent css={[tw`flex-1 w-full`]}>
           <Typography>{name}</Typography>
           <Typography>{description}</Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button>Buy</Button>
+        <Button
+          onClick={(): void => {
+            router.push({
+              pathname: '/restaurant',
+              query: { id: restaurantId },
+            });
+          }}
+        >
+          View
+        </Button>
       </CardActions>
     </Card>
   );

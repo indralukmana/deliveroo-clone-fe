@@ -6,8 +6,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from 'src/theme';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
+import { API_URL } from 'src/lib/constants';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
 });
