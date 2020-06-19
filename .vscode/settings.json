@@ -10,12 +10,12 @@
       "typescriptreact"
   ],
   "tslint.enable": false,
-  "peacock.remoteColor": "#dd0531",
+  "peacock.remoteColor": "#3f51b5",
   "workbench.colorCustomizations": {
-    "titleBar.activeBackground": "#1857a4",
+    "titleBar.activeBackground": "#3f51b5",
     "titleBar.activeForeground": "#e7e7e7",
-    "titleBar.border": "#1857a4",
-    "titleBar.inactiveBackground": "#1857a499",
+    "titleBar.border": "#3f51b5",
+    "titleBar.inactiveBackground": "#3f51b599",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
