@@ -11,6 +11,17 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> =>
       uri: `${API_URL}/graphql`,
     }),
     cache: new InMemoryCache(),
+    defaultOptions: {
+      mutate: {
+        errorPolicy: 'all',
+      },
+      query: {
+        errorPolicy: 'all',
+      },
+      watchQuery: {
+        errorPolicy: 'all',
+      },
+    },
   });
 
 export const initializeApollo = (
