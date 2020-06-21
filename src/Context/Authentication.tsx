@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { LOGIN_QUERY_MUTATION, QUERY_ME } from 'src/graphql/queries';
 import { ApolloError } from 'apollo-boost';
 
@@ -8,8 +8,8 @@ type User = {
   email: string;
   username: string;
   loading: boolean;
-  networkError?: Error;
-  queryError?: ApolloError;
+  error: Error | null;
+  queryError: ApolloError | null;
 };
 
 type AuthenticationContextType = {
@@ -24,10 +24,17 @@ export const AuthenticationProvider = ({
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
-  const userInitialState = { id: '', email: '', username: '', loading: false };
+  const userInitialState: User = {
+    id: '',
+    email: '',
+    username: '',
+    loading: false,
+    error: null,
+    queryError: null,
+  };
   const [user, setUser] = useState<User>(userInitialState);
   const [doSignin, { error: queryErrorSignin }] = useMutation(LOGIN_QUERY_MUTATION);
-  const { data: syncMeData, error: queryErrorSyncMe, refetch } = useQuery(QUERY_ME);
+  const [doQueryme, { data: syncMeData, error: queryErrorSyncMe }] = useLazyQuery(QUERY_ME);
 
   const signin = async (email: string, password: string): Promise<void> => {
     try {
@@ -52,7 +59,7 @@ export const AuthenticationProvider = ({
 
       setUser((prevState) => ({ ...prevState, ...userData }));
     } catch (error) {
-      setUser((prevState) => ({ ...prevState, networkError: error }));
+      setUser((prevState) => ({ ...prevState, error }));
     } finally {
       setUser((prevState) => ({ ...prevState, loading: false }));
     }
@@ -60,8 +67,17 @@ export const AuthenticationProvider = ({
 
   const syncMe = useCallback(async (): Promise<void> => {
     try {
-      setUser((prevState) => ({ ...prevState, loading: true }));
-      await refetch();
+      const token = window.localStorage.getItem('jwt');
+
+      if (!token) {
+        return;
+      }
+
+      setUser((prevState) => ({
+        ...prevState,
+        loading: true,
+      }));
+      doQueryme();
 
       const userData = {
         id: syncMeData?.me.id as string,
@@ -71,11 +87,11 @@ export const AuthenticationProvider = ({
 
       setUser((prevState) => ({ ...prevState, ...userData }));
     } catch (error) {
-      setUser((prevState) => ({ ...prevState, networkError: error }));
+      setUser((prevState) => ({ ...prevState, error }));
     } finally {
       setUser((prevState) => ({ ...prevState, loading: false }));
     }
-  }, [refetch, syncMeData]);
+  }, [doQueryme, syncMeData]);
 
   useEffect(() => {
     syncMe();
@@ -83,7 +99,10 @@ export const AuthenticationProvider = ({
 
   return (
     <AuthenticationContext.Provider
-      value={{ user: { ...user, queryError: queryErrorSignin ?? queryErrorSyncMe }, signin }}
+      value={{
+        user: { ...user, queryError: queryErrorSignin ?? queryErrorSyncMe ?? null },
+        signin,
+      }}
     >
       {children}
     </AuthenticationContext.Provider>

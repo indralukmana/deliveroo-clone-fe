@@ -35,10 +35,10 @@ const Signin = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (user.networkError || user.queryError) {
+    if (user.error || user.queryError) {
       setSnackbarType('error');
     }
-  }, [user.networkError, user.queryError]);
+  }, [user.error, user.queryError]);
 
   useEffect(() => {
     if (user.username) {
@@ -109,7 +109,7 @@ const Signin = (): JSX.Element => {
           >
             <Alert onClose={(): void => setSnackbarType('')} severity="error">
               <AlertTitle>Error</AlertTitle>
-              {user.networkError && 'Network error please check your connection'}
+              {user.queryError?.networkError && 'Network error please check your connection'}
               {user.queryError?.graphQLErrors?.map(({ extensions }) =>
                 extensions?.exception?.data?.message[0]?.messages.map(
                   ({ message }: { message: string }, i: string | number | undefined) => (
