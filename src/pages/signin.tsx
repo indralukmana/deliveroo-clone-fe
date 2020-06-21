@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from 'src/layout/main';
-import { gql } from 'apollo-boost';
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import {
   TextField,
   Button,
@@ -14,73 +12,40 @@ import {
 import { Alert, AlertTitle } from '@material-ui/lab';
 import tw from 'twin.macro';
 import { useRouter } from 'next/dist/client/router';
-
-const LOGIN_QUERY_MUTATION = gql`
-  mutation Login($input: UsersPermissionsLoginInput!) {
-    login(input: $input) {
-      jwt
-      user {
-        id
-        email
-        confirmed
-        blocked
-        role {
-          id
-          name
-          description
-          type
-        }
-      }
-    }
-  }
-`;
+import { useAuthentication } from 'src/Context/Authentication';
 
 const Signin = (): JSX.Element => {
-  const client = useApolloClient();
-  const [signin, { data, error, loading }] = useMutation(LOGIN_QUERY_MUTATION);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { user, signin } = useAuthentication();
 
   const [snackbarType, setSnackbarType] = useState<'error' | 'success' | ''>('');
 
   const router = useRouter();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    if (loading) {
+    if (user.loading) {
       return;
     }
 
-    try {
-      await client.clearStore();
-      await signin({
-        variables: {
-          input: {
-            identifier: email,
-            password,
-            provider: 'local',
-          },
-        },
-      });
-    } catch (networkError) {
-      setSnackbarType('error');
-    }
+    signin(email, password);
   };
 
   useEffect(() => {
-    if (error) {
+    if (user.networkError || user.queryError) {
       setSnackbarType('error');
     }
-  }, [error]);
+  }, [user.networkError, user.queryError]);
 
   useEffect(() => {
-    if (data) {
+    if (user.username) {
       setSnackbarType('success');
-      window.localStorage.setItem('jwt', data.login.jwt);
       router.push('/');
     }
-  }, [data, router]);
+  }, [router, user.username]);
 
   return (
     <MainLayout>
@@ -117,16 +82,16 @@ const Signin = (): JSX.Element => {
                 css={[tw`w-full overflow-hidden`]}
               >
                 Login
-                {loading && (
+                {user.loading && (
                   <div
                     css={[
                       tw`absolute top-0 left-0 w-full h-full flex justify-center items-center bg-blue-500 opacity-75`,
                     ]}
                   >
                     <Fade
-                      in={loading}
+                      in={user.loading}
                       style={{
-                        transitionDelay: loading ? '800ms' : '0ms',
+                        transitionDelay: user.loading ? '800ms' : '0ms',
                       }}
                       unmountOnExit
                     >
@@ -144,37 +109,17 @@ const Signin = (): JSX.Element => {
           >
             <Alert onClose={(): void => setSnackbarType('')} severity="error">
               <AlertTitle>Error</AlertTitle>
-              {error?.networkError && 'Network error please check your connection'}
-              {error?.graphQLErrors.map(({ extensions }) => (
-                <span key={0}>
-                  {extensions?.exception.data.message[0].messages.map(
-                    ({ message }: { message: string }, i: string | number | undefined) => (
-                      <span key={i}>{message.toLowerCase().replace('identifier', 'email')}</span>
-                    ),
-                  )}
-                </span>
-              ))}
+              {user.networkError && 'Network error please check your connection'}
+              {user.queryError?.graphQLErrors?.map(({ extensions }) =>
+                extensions?.exception?.data?.message[0]?.messages.map(
+                  ({ message }: { message: string }, i: string | number | undefined) => (
+                    <span key={i}>{message.toLowerCase().replace('identifier', 'email')}</span>
+                  ),
+                ),
+              )}
             </Alert>
           </Snackbar>
-          <Snackbar
-            open={snackbarType === 'error'}
-            autoHideDuration={6000}
-            onClose={(): void => setSnackbarType('')}
-          >
-            <Alert onClose={(): void => setSnackbarType('')} severity="error">
-              <AlertTitle>Error</AlertTitle>
-              {error?.networkError && 'Network error please check your connection'}
-              {error?.graphQLErrors.map(({ extensions }) => (
-                <span key={0}>
-                  {extensions?.exception.data.message[0].messages.map(
-                    ({ message }: { message: string }, i: string | number | undefined) => (
-                      <span key={i}>{message.toLowerCase().replace('identifier', 'email')}</span>
-                    ),
-                  )}
-                </span>
-              ))}
-            </Alert>
-          </Snackbar>
+
           <Snackbar
             open={snackbarType === 'success'}
             autoHideDuration={6000}

@@ -1,15 +1,36 @@
 import { useMemo } from 'react';
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from 'apollo-boost';
+import { setContext } from 'apollo-link-context';
+
 import { API_URL } from './constants';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
+const authLink = setContext((_, { headers }) => {
+  if (typeof window === 'undefined') {
+    return {
+      headers,
+    };
+  }
+
+  const jwt = window.localStorage.getItem('jwt');
+
+  return {
+    headers: {
+      ...headers,
+      authorization: jwt ? `Bearer ${jwt}` : '',
+    },
+  };
+});
+
+const httpLink = new HttpLink({
+  uri: `${API_URL}/graphql`,
+});
+
 const createApolloClient = (): ApolloClient<NormalizedCacheObject> =>
   new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: `${API_URL}/graphql`,
-    }),
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     defaultOptions: {
       mutate: {

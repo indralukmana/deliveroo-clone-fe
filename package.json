@@ -23,6 +23,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "apollo-boost": "^0.4.9",
+    "apollo-link-context": "^1.0.20",
     "clsx": "^1.1.1",
     "graphql": "^15.1.0",
     "next": "^9.4.4",
