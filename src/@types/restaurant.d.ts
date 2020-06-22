@@ -35,7 +35,5 @@ type RestaurantPageProps = {
 };
 
 type DishCardProps = {
-  name: string;
-  price: number;
-  imageSrc: string;
+  dish: Dish;
 };

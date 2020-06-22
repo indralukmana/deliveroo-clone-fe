@@ -1,28 +1,38 @@
-import React from 'react';
 import {
+  Button,
   Card,
   CardActionArea,
-  CardMedia,
-  CardContent,
-  Typography,
   CardActions,
-  Button,
+  CardContent,
+  CardMedia,
+  Typography,
 } from '@material-ui/core';
+import React from 'react';
+import { ActionType, useCart } from 'src/Context/Cart';
+import { API_URL } from 'src/lib/constants';
 import tw from 'twin.macro';
 
-const DishCard = ({ name, price, imageSrc }: DishCardProps): JSX.Element => {
+const DishCard = ({ dish }: DishCardProps): JSX.Element => {
+  const { cartDispatch } = useCart();
+
   return (
     <Card css={[tw`w-full`]}>
       <CardActionArea>
-        <CardMedia image={imageSrc} title={name} css={[tw`h-32`]} />
+        <CardMedia image={API_URL + dish.image.url} title={dish.name} css={[tw`h-32`]} />
 
         <CardContent>
-          <Typography>{name}</Typography>
-          <Typography>${price}</Typography>
+          <Typography>{dish.name}</Typography>
+          <Typography>${dish.price}</Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button>Add to cart</Button>
+        <Button
+          onClick={(): void => {
+            cartDispatch({ payload: dish, type: ActionType.AddToCart });
+          }}
+        >
+          Add to cart
+        </Button>
       </CardActions>
     </Card>
   );

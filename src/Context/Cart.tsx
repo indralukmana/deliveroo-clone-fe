@@ -10,9 +10,9 @@ type Cart = {
   error: Error | null;
 };
 
-enum ActionType {
-  AddToCart,
-  RemoveFromCart,
+export enum ActionType {
+  AddToCart = 'ADD_TO_CART',
+  RemoveFromCart = 'REMOVE_FROM_CART',
 }
 
 type CartAction =
@@ -29,6 +29,7 @@ const cartReducer = (state: Cart, action: CartAction): Cart => {
   switch (action.type) {
     case ActionType.AddToCart:
       console.log('added');
+      console.log(action.payload);
       return state;
 
     case ActionType.RemoveFromCart:
