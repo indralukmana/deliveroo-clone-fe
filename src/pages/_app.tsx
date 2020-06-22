@@ -1,12 +1,13 @@
-import React from 'react';
-import Head from 'next/head';
-import { AppProps } from 'next/app';
-import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from 'src/theme';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { useApollo } from 'src/lib/apolloClient';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { StylesProvider, ThemeProvider } from '@material-ui/core/styles';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import React from 'react';
 import { AuthenticationProvider } from 'src/Context/Authentication';
+import { CartProvider } from 'src/Context/Cart';
+import { useApollo } from 'src/lib/apolloClient';
+import theme from 'src/theme';
 
 export default function MyApp(props: AppProps): JSX.Element {
   const { Component, pageProps } = props;
@@ -30,12 +31,14 @@ export default function MyApp(props: AppProps): JSX.Element {
 
       <ApolloProvider client={apolloClient}>
         <AuthenticationProvider>
-          <ThemeProvider theme={theme}>
-            <StylesProvider injectFirst>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </StylesProvider>
-          </ThemeProvider>
+          <CartProvider>
+            <ThemeProvider theme={theme}>
+              <StylesProvider injectFirst>
+                <CssBaseline />
+                <Component {...pageProps} />
+              </StylesProvider>
+            </ThemeProvider>
+          </CartProvider>
         </AuthenticationProvider>
       </ApolloProvider>
     </>
