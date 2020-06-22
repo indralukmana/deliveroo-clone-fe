@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useAuthentication } from 'src/Context/Authentication';
 import tw from 'twin.macro';
+import CartModalButton from './cart-modal-button';
 
 const MainAppBar = (): JSX.Element => {
   const { user, signout } = useAuthentication();
@@ -23,6 +24,8 @@ const MainAppBar = (): JSX.Element => {
             </Typography>
           </Link>
         </div>
+
+        <CartModalButton />
 
         {showSignin && (
           <Fade in={!user.loading && !user.username} style={{ transitionDelay: '400ms' }}>
