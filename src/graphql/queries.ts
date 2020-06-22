@@ -23,3 +23,16 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
+export const MUTATION_REGISTER = gql`
+  mutation Register($input: UsersPermissionsRegisterInput!) {
+    register(input: $input) {
+      jwt
+      user {
+        id
+        username
+        email
+      }
+    }
+  }
+`;

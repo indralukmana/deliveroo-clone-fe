@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import { useMutation, useLazyQuery } from '@apollo/react-hooks';
-import { LOGIN_QUERY_MUTATION, QUERY_ME } from 'src/graphql/queries';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { ApolloError } from 'apollo-boost';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { LOGIN_QUERY_MUTATION, MUTATION_REGISTER, QUERY_ME } from 'src/graphql/queries';
 
 type User = {
   id: string;
@@ -15,6 +15,7 @@ type User = {
 type AuthenticationContextType = {
   user: User;
   signin: (email: string, password: string) => void;
+  signup: (email: string, password: string) => void;
   signout: () => void;
 };
 
@@ -35,6 +36,7 @@ export const AuthenticationProvider = ({
   };
   const [user, setUser] = useState<User>(userInitialState);
   const [doSignin, { error: queryErrorSignin }] = useMutation(LOGIN_QUERY_MUTATION);
+  const [doSignup, { error: queryErrorRegister }] = useMutation(MUTATION_REGISTER);
   const [doQueryme, { data: syncMeData, error: queryErrorSyncMe }] = useLazyQuery(QUERY_ME);
 
   const signin = async (email: string, password: string): Promise<void> => {
@@ -69,6 +71,36 @@ export const AuthenticationProvider = ({
   const signout = (): void => {
     window.localStorage.removeItem('jwt');
     setUser(userInitialState);
+  };
+
+  const signup = async (email: string, password: string): Promise<void> => {
+    try {
+      setUser({ ...userInitialState, loading: true });
+
+      const { data } = await doSignup({
+        variables: {
+          input: {
+            username: email,
+            email,
+            password,
+          },
+        },
+      });
+
+      window.localStorage.setItem('jwt', data.register.jwt as string);
+
+      const userData = {
+        id: data.register.user.id as string,
+        email: data.register.user.email as string,
+        username: data.register.user.username as string,
+      };
+
+      setUser((prevState) => ({ ...prevState, ...userData }));
+    } catch (error) {
+      setUser((prevState) => ({ ...prevState, error }));
+    } finally {
+      setUser((prevState) => ({ ...prevState, loading: false }));
+    }
   };
 
   const syncMe = useCallback(async (): Promise<void> => {
@@ -107,9 +139,13 @@ export const AuthenticationProvider = ({
   return (
     <AuthenticationContext.Provider
       value={{
-        user: { ...user, queryError: queryErrorSignin ?? queryErrorSyncMe ?? null },
+        user: {
+          ...user,
+          queryError: queryErrorSignin ?? queryErrorSyncMe ?? queryErrorRegister ?? null,
+        },
         signin,
         signout,
+        signup,
       }}
     >
       {children}
