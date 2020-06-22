@@ -81,7 +81,7 @@ const Signin = (): JSX.Element => {
                 color="primary"
                 css={[tw`w-full overflow-hidden`]}
               >
-                Login
+                Sign in
                 {user.loading && (
                   <div
                     css={[

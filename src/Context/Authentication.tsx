@@ -15,6 +15,7 @@ type User = {
 type AuthenticationContextType = {
   user: User;
   signin: (email: string, password: string) => void;
+  signout: () => void;
 };
 
 const AuthenticationContext = createContext({} as AuthenticationContextType);
@@ -65,18 +66,24 @@ export const AuthenticationProvider = ({
     }
   };
 
+  const signout = (): void => {
+    window.localStorage.removeItem('jwt');
+    setUser(userInitialState);
+  };
+
   const syncMe = useCallback(async (): Promise<void> => {
     try {
+      setUser((prevState) => ({
+        ...prevState,
+        loading: true,
+      }));
+
       const token = window.localStorage.getItem('jwt');
 
       if (!token) {
         return;
       }
 
-      setUser((prevState) => ({
-        ...prevState,
-        loading: true,
-      }));
       doQueryme();
 
       const userData = {
@@ -102,6 +109,7 @@ export const AuthenticationProvider = ({
       value={{
         user: { ...user, queryError: queryErrorSignin ?? queryErrorSyncMe ?? null },
         signin,
+        signout,
       }}
     >
       {children}
