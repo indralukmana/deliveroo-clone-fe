@@ -16,6 +16,9 @@ type RestaurantCardProps = {
 
 type Dish = {
   id: string;
+  restaurant: {
+    id: string;
+  };
   name: string;
   price: number;
   image: {

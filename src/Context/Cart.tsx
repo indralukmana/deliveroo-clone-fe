@@ -27,10 +27,33 @@ type CartAction =
 
 const cartReducer = (state: Cart, action: CartAction): Cart => {
   switch (action.type) {
-    case ActionType.AddToCart:
-      console.log('added');
-      console.log(action.payload);
-      return state;
+    case ActionType.AddToCart: {
+      const dish = action.payload;
+      let newDishOrders = state.dishOrders;
+
+      const foundDishOrder = state.dishOrders.find((dishOrder) => dish.id === dishOrder.id);
+
+      newDishOrders = foundDishOrder
+        ? state.dishOrders.map((dishOrder) => {
+            if (dishOrder.id === dish.id) {
+              return {
+                ...dishOrder,
+                count: dishOrder.count + 1,
+                subtotal: dishOrder.subtotal + dish.price,
+              };
+            }
+
+            return dishOrder;
+          })
+        : [...newDishOrders, { ...dish, count: 1, subtotal: dish.price }];
+
+      return {
+        ...state,
+        restaurantId: dish.restaurant.id,
+        dishOrders: newDishOrders,
+        total: state.total + dish.price,
+      };
+    }
 
     case ActionType.RemoveFromCart:
       console.log('remove');

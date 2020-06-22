@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-import MainLayout from 'src/layout/main';
-import tw from 'twin.macro';
-import DishList from 'src/components/dish-list';
-import { NextPageContext } from 'next';
-import { gql } from 'apollo-boost';
-import { initializeApollo } from 'src/lib/apolloClient';
 import { Typography } from '@material-ui/core';
+import { gql } from 'apollo-boost';
+import { NextPageContext } from 'next';
+import React from 'react';
+import DishList from 'src/components/dish-list';
+import MainLayout from 'src/layout/main';
+import { initializeApollo } from 'src/lib/apolloClient';
+import tw from 'twin.macro';
 
 const GET_RESTAURANT_DISHES = gql`
   query RestaurantAndDishes($restaurantId: ID!) {
@@ -14,6 +14,9 @@ const GET_RESTAURANT_DISHES = gql`
       name
       dishes {
         id
+        restaurant {
+          id
+        }
         name
         price
         image {
