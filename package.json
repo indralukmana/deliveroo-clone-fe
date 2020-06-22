@@ -1,18 +1,19 @@
 {
   "name": "deliveroo-clone-fe",
-  "description": "Deliveroo Clone Front End",
   "version": "1.0.0",
+  "description": "Deliveroo Clone Front End",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "type-check": "tsc",
     "code:check": "yarn code:lint; yarn code:format --check",
+    "code:check:rules": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "code:clean": "yarn code:lint --fix; yarn code:format --write",
-    "code:lint": "eslint --ext .js,.jsx,.ts,.tsx \"src/\"",
     "code:format": "prettier './src/**/**.{js,jsx,ts,tsx}'",
-    "code:check:rules": "eslint --print-config .eslintrc.js | eslint-config-prettier-check"
+    "code:lint": "eslint --ext .js,.jsx,.ts,.tsx \"src/\"",
+    "dev": "next",
+    "start": "next start",
+    "type-check": "tsc"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
@@ -39,9 +40,10 @@
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.21.2",
     "poetic": "^1.5.0",
+    "prettier-plugin-organize-imports": "^1.1.0",
+    "prettier-plugin-packagejson": "^2.2.5",
     "tailwindcss": "^1.4.6",
     "typescript": "^3.9.5",
     "typescript-plugin-tw-template": "^2.0.1"
-  },
-  "license": "MIT"
+  }
 }
