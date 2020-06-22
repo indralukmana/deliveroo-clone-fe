@@ -16,7 +16,7 @@ const DishCard = ({ dish }: DishCardProps): JSX.Element => {
   const { cartDispatch } = useCart();
 
   return (
-    <Card css={[tw`w-full`]}>
+    <Card css={[tw`w-56`]}>
       <CardActionArea>
         <CardMedia image={API_URL + dish.image.url} title={dish.name} css={[tw`h-32`]} />
 
