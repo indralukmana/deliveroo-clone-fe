@@ -22,7 +22,7 @@ type CartAction =
     }
   | {
       type: ActionType.RemoveFromCart;
-      payload: Dish;
+      payload: DishOrder;
     };
 
 const cartReducer = (state: Cart, action: CartAction): Cart => {
@@ -55,9 +55,37 @@ const cartReducer = (state: Cart, action: CartAction): Cart => {
       };
     }
 
-    case ActionType.RemoveFromCart:
-      console.log('remove');
-      return state;
+    case ActionType.RemoveFromCart: {
+      let newDishOrders = state.dishOrders;
+
+      if (action.payload.count === 1) {
+        const foundOrderIndex = newDishOrders.findIndex(
+          (dishOrder) => dishOrder.id === action.payload.id,
+        );
+        newDishOrders.splice(foundOrderIndex, 1);
+      } else {
+        newDishOrders = newDishOrders.map((dishOrder) => {
+          if (dishOrder.id === action.payload.id) {
+            const mutatedDishOrder: DishOrder = {
+              ...dishOrder,
+              count: dishOrder.count - 1,
+              subtotal: dishOrder.subtotal - action.payload.price,
+            };
+
+            return mutatedDishOrder;
+          }
+
+          return dishOrder;
+        });
+      }
+
+      return {
+        ...state,
+        dishOrders: newDishOrders,
+        restaurantId: newDishOrders.length === 0 ? '' : state.restaurantId,
+        total: state.total - action.payload.price,
+      };
+    }
 
     default:
       return state;

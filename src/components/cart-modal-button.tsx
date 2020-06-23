@@ -37,21 +37,21 @@ const CartModalButton = (): JSX.Element => {
         <Fade in={open}>
           <Paper css={[tw`p-5`]}>
             <h2 id="transition-modal-title">Cart</h2>
-            {cart.dishOrders.map((dish) => (
+            {cart.dishOrders.map((dishOrder) => (
               <div css={[tw`flex justify-between items-center`]}>
-                <span>{dish.name}</span>
+                <span>{dishOrder.name}</span>
                 <div>
                   <IconButton
                     onClick={(): void =>
-                      cartDispatch({ type: ActionType.AddToCart, payload: dish })
+                      cartDispatch({ type: ActionType.AddToCart, payload: dishOrder })
                     }
                   >
                     <AddCircle />
                   </IconButton>
-                  <span>{dish.count}</span>
+                  <span>{dishOrder.count}</span>
                   <IconButton
                     onClick={(): void =>
-                      cartDispatch({ type: ActionType.RemoveFromCart, payload: dish })
+                      cartDispatch({ type: ActionType.RemoveFromCart, payload: dishOrder })
                     }
                   >
                     <RemoveCircle />
